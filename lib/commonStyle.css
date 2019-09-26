@@ -1,0 +1,220 @@
+body {
+    margin: 0;
+    font: 14px/22px Arial, 微软雅黑;
+    color: #333;
+    word-wrap: break-word;
+    cursor: default;
+}
+
+body.plr5 {
+    padding: 25px 5%;
+}
+
+.title-bar {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 10px 1em;
+}
+
+.navi-bar-box>.navi-bar {
+    height: 100%;
+    width: 150px;
+    padding: 0 10px;
+    position: absolute;
+    background-color: #1e99e996;
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+    transition: 1s all;
+}
+
+.navi-bar-box>.navi-bar:not(:hover) {
+    transition: all 1s;
+    transform: translateX(-140px);
+}
+
+.navi-bar button:first-child {
+    margin-top: 30px;
+}
+
+.navi-bar button {
+    word-wrap: break-word;
+    width: 100%;
+    height: 60px;
+    background-color: #f5f5dcdd;
+    border: none;
+    display: inline-block;
+    cursor: pointer;
+    border-top: 1px solid #f5f5dcff;
+    border-bottom: 1px solid #f5f5dcff;
+}
+
+.navi-bar button:hover {
+    background-color: cornsilk;
+    color: inherit;
+}
+
+#work-list {
+    text-align: center;
+    padding: 20px;
+    margin: auto;
+    width: 475px;
+    font-size: 1.2em;
+}
+
+#work-list ul {
+    list-style: none;
+    margin: 20px;
+    padding: 0;
+}
+
+#work-list li {
+    padding: 5px;
+    border: 2px solid snow;
+    background-color: antiquewhite;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+#work-list li:not(:first-child) {
+    border-top: none;
+}
+
+#work-list li:hover {
+    background-color: #cddc39a0;
+}
+
+button {
+    cursor: pointer;
+    outline: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+}
+
+a:hover {
+    color: blueviolet;
+}
+
+.buttons {
+    width: 100%;
+    display: inline-block;
+}
+
+.right.buttons {
+    width: auto;
+    float: right;
+}
+
+.buttons a, .buttons button {
+    text-decoration: none;
+    border: 2px dotted;
+    border-radius: 8px;
+    border-color: darkgreen;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: ghostwhite;
+}
+
+.buttons a.previous {
+    background-color: antiquewhite;
+    color: #333;
+}
+
+.buttons a.next {
+    background-color: burlywood;
+    color: snow;
+}
+
+.buttons a+a, .buttons button+button {
+    margin-right: 10px;
+}
+
+.buttons a:hover, .buttons button:hover {
+    opacity: 0.8;
+}
+
+.right.buttons button {
+    width: auto;
+    float: left;
+}
+
+.right.buttons a+a, .right.buttons button+button {
+    margin-left: 10px;
+    margin-right: 0px;
+}
+
+iframe {
+    margin: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;
+}
+
+textarea {
+    resize: none;
+}
+
+.footer {
+    font-size: 0.8em;
+    -webkit-text-stroke: 1px antiquewhite;
+    position: absolute;
+    right: 30px;
+    bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 15px;
+    line-height: 2em;
+    overflow: hidden;
+}
+
+ul li {
+    background-color: #ffffff60;
+    padding: 10px
+}
+
+ul.large li {
+    height: 100px;
+}
+
+ul.more-large li {
+    height: 175px;
+}
+
+ul li:not(:last-child) {
+    border-bottom: 1px solid #9e9e9e50;
+}
+
+ul:not(.no-hover) li:hover {
+    background-color: #ffffffdd;
+}
+
+div.sample textarea {
+    height: 200px;
+    width: 300px;
+    margin-right: 20px;
+}
+
+div.sample button {
+    float: right;
+    position: relative;
+}
+
+div.sample span {
+    position: relative;
+    float: right;
+    padding-top: 20px;
+}
+
+.control-bar.buttons {
+    padding: 20px;
+    border: solid 0.5px #F44336;
+    border-radius: 20px;
+}

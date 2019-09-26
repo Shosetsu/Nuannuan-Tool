@@ -1,0 +1,88 @@
+table.fight-simulator {
+    table-layout: fixed;
+    border-radius: 5%;
+    margin: 10px;
+    padding: 10px;
+    display: inline-block;
+    background-color: rgba(215, 229, 250, 0.8);
+}
+
+table.fight-simulator.甜美 {
+    background-color: rgba(250, 215, 215, 0.8);
+}
+
+table.fight-simulator.清新 {
+    background-color: rgba(215, 248, 250, 0.8);
+}
+
+table.fight-simulator.典雅 {
+    background-color: rgb(250, 235, 215, 0.8);
+}
+
+table.fight-simulator.帅气 {
+    background-color: rgba(215, 221, 250, 0.8);
+}
+
+table.fight-simulator.性感 {
+    background-color: rgba(249, 215, 250, 0.8);
+}
+
+table.fight-simulator tr.title th {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+table.fight-simulator tr.title span {
+    line-height: 40px;
+}
+
+table.fight-simulator tr.title input.table-name {
+    width: 100px;
+    height: 15px;
+}
+
+table.fight-simulator tr.title button {
+    float: right;
+    height: 40px;
+    padding: 5px;
+    margin: 0 2px;
+    border-radius: 10%;
+    background: snow;
+    font-size: 12px;
+}
+
+table.fight-simulator tr th {
+    text-align: right;
+}
+
+table.fight-simulator tr td {
+    width: 100px;
+    margin-right: 5px;
+}
+
+table.fight-simulator tr input {
+    width: 75px;
+    height: 18px;
+    padding: 3px;
+    margin: 2px 0 2px 0;
+    font-size: 1.05em;
+}
+
+table.fight-simulator tr input.percent {
+    margin: 2px 5px 2px 0;
+    width: 55px;
+}
+
+table.fight-simulator tr td.result {
+    -webkit-text-stroke: 1px rgb(238, 79, 79);
+    color: whitesmoke;
+}
+
+table.fight-simulator tr td.result2 {
+    -webkit-text-stroke: 1px rgb(79, 153, 238);
+    color: whitesmoke;
+}
+
+table.fight-simulator {
+    font-family: 'Noto Sans SC', sans-serif, '幼圆'!important;
+}

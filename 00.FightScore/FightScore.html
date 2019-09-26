@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html style="background-color: aliceblue;">
+<head>
+<meta charset="utf-8">
+<title>搭配之战模拟器</title>
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../lib/commonStyle.css">
+<link rel="stylesheet" type="text/css" href="./simulator.css">
+<script src="../lib/vue.js"></script>
+<script src="../lib/tools.js"></script>
+<script src="../lib/layout.js"></script>
+<script src="../lib/bignumber.min.js"></script>
+</head>
+<body class="plr5">
+	<div id="main-box">
+		<div class="control-bar buttons">
+			<a @click="newTable()">添加新的搭配计算面板</a>
+			<a @click="">打开对比列表(没做！)</a>
+		</div>
+		<span v-for="tableInfo in tableList">
+			<simulator-table v-bind:input="tableInfo"></simulator-table>
+		</span>
+	</div>
+</body>
+<footer>
+	<datalist id="scoreType">
+		<option>甜美</option>
+		<option>清新</option>
+		<option>典雅</option>
+		<option>帅气</option>
+		<option>性感</option>
+	</datalist>
+<script src="simulator.js"></script>
+</footer>
+</html>
