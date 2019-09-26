@@ -1,21 +1,33 @@
 <!DOCTYPE HTML>
 <html style="background-color: aliceblue;">
+
 <head>
-<meta charset="utf-8">
-<title>搭配之战模拟器</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../lib/commonStyle.css">
-<link rel="stylesheet" type="text/css" href="./simulator.css">
-<script src="../lib/vue.js"></script>
-<script src="../lib/tools.js"></script>
-<script src="../lib/layout.js"></script>
-<script src="../lib/bignumber.min.js"></script>
+	<meta charset="utf-8">
+	<title>搭配之战模拟器</title>
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../lib/commonStyle.css">
+	<link rel="stylesheet" type="text/css" href="./simulator.css">
+	<script src="../lib/vue.js"></script>
+	<script src="../lib/tools.js"></script>
+	<script src="../lib/layout.js"></script>
+	<script src="../lib/bignumber.min.js"></script>
 </head>
-<body class="plr5">
+
+<body class="plr10">
 	<div id="main-box">
 		<div class="control-bar buttons">
 			<a @click="newTable()">添加新的搭配计算面板</a>
-			<a @click="">打开对比列表(没做！)</a>
+			<a @click="comparisonVsible=!comparisonVsible">{{!comparisonVsible?"打开对比列表":"关闭对比列表"}}</a>
+		</div>
+		<div :class="!currentCompareFlag?'hide':'show'" class="compare-board"><h4>已将{{currentCompareName}}追加到对比列表。</h4></div>
+		<div :class="!comparisonVsible?'hide':'show'" class="compare-board">
+			<h3>对比列表<button style="height: 30px; width: 30px; border-radius: 100%;" @click="comparisonVsible=!comparisonVsible">X</button></h3>
+			<ul>
+				<li v-for="(item,index) in getComparisonList" style="text-align: left">{{item.scoreType}} -
+					基础搭配之力：{{item.base}} - 心之技能倍率：{{percentAsForHeart(item).toFormat(0)}}% -
+					影之召唤倍率：{{percentAsForShadow(item).toFormat(0)}}% - 总分：{{allPoint(item).toFormat(0)}}<button
+						@click="deleteCompare(index)">删除</button></li>
+			</ul>
 		</div>
 		<span v-for="tableInfo in tableList">
 			<simulator-table v-bind:input="tableInfo"></simulator-table>
@@ -30,6 +42,7 @@
 		<option>帅气</option>
 		<option>性感</option>
 	</datalist>
-<script src="simulator.js"></script>
+	<script src="simulator.js"></script>
 </footer>
+
 </html>

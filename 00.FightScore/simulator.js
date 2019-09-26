@@ -7,7 +7,7 @@ var vApp = new Vue({
             props: ['input'],
             template: `		<table class="fight-simulator" :class="input.scoreType"><tbody><span style='display:none'>{{input.id}}</span>
             <tr class="title"><th colspan="4"><span>搭配计算面板名：<input class="table-name" type="text" v-model="input.scoreType" list="scoreType" @blur="saveAllData()" /></span>
-            <button @click="deleteTable(input.id)">删除</button><button>添加到对比</button><button @click="newTable(input)">从此模板生成</button></th></tr>
+            <button @click="deleteTable(input.id)">删除</button><button @click="compareThis(input)">添加到对比</button><button @click="newTable(input)">从此模板生成</button></th></tr>
 			<tr><th>基础搭配之力：</th><td><input type="number" v-model="input.base" @blur="saveAllData()" /></td><th>搭配之力基础倍率：</th><td>300.00%</td></tr>
 			<tr><th>被动1加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="saveAllData()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}}%</td></tr>
 			<tr><th>被动2加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="saveAllData()" />%</td><th>影之召唤最终倍率：</th><td>{{percentAsForShadow.toFormat(2)}}%</td></tr>
@@ -22,23 +22,16 @@ var vApp = new Vue({
             </tbody></table>`,
             computed: {
                 percentAsForHeart: function () {
-                    let base = str2BigNumber("70");
-                    let passive = str2BigNumber(this.input.passive1).plus(str2BigNumber(this.input.passive2)).plus(str2BigNumber(this.input.passive3));
-                    let critical = str2BigNumber(this.input.bigCriticalTimes).times("6.25").plus(str2BigNumber(this.input.smallCriticalTimes).times("3.25"));
-                    let image = str2BigNumber(this.input.imageHeart).times("0.01").plus(1);
-                    return (base.plus(passive).plus(critical)).times(image).times(3);
+                    return this.$parent.percentAsForHeart(this.input);
                 },
                 percentAsForShadow: function () {
-                    let base = str2BigNumber(this.input.shadow);
-                    let proactive = str2BigNumber(this.input.twentyHeart).times("0.51").plus(str2BigNumber(this.input.tenHeart).times("0.38"));
-                    let image = str2BigNumber(this.input.imageShadow).times("0.01").plus(1);
-                    return (base.plus(proactive)).times(image).times(3);
+                    return this.$parent.percentAsForShadow(this.input);
                 },
                 allPercent: function () {
-                    return this.percentAsForHeart.plus(this.percentAsForShadow).plus(300);
+                    return this.$parent.allPercent(this.input);
                 },
                 allPoint: function () {
-                    return str2BigNumber(this.input.base).times(this.allPercent).dividedBy(100);
+                    return this.$parent.allPoint(this.input);
                 }
             },
             methods: {
@@ -48,8 +41,11 @@ var vApp = new Vue({
                 deleteTable: function (id) {
                     this.$parent.deleteTable(id);
                 },
-                saveAllData:function(){
+                saveAllData: function () {
                     this.$parent.saveAllData();
+                },
+                compareThis: function (info) {
+                    this.$parent.compareThis(info);
                 }
 
             }
@@ -57,12 +53,25 @@ var vApp = new Vue({
     },
     data: function () {
         return {
-            tableList:getLocalSession("FightScoreTableSaveData",[]) 
+            comparisonVsible: false,
+            currentCompareFlag: false,
+            currentCompareName: "",
+            comparisonList: [],
+            tableList: getLocalSession("FightScoreTableSaveData", [])
         };
+    },
+    computed: {
+        getComparisonList: function () {
+            return this.comparisonList.sort(function (a, b) {
+                return vApp.allPoint(b) - vApp.allPoint(a);
+            })
+        }
     },
     methods: {
         newTable: function (info = {}) {
-            this.tableList.push(Object.assign({ id: Math.floor(Math.random() * 10000000) }, info));
+            this.tableList.push(
+                Object.assign(Object.assign({}, info), { id: Math.floor(Math.random() * 10000000) })
+            );
             this.saveAllData();
         },
         deleteTable: function (id) {
@@ -77,6 +86,37 @@ var vApp = new Vue({
         },
         saveAllData: function () {
             localStorage.setItem("FightScoreTableSaveData", JSON.stringify(this.tableList));
+        },
+        compareThis: function (info) {
+            if (this.comparisonList.indexOf(info) == -1) {
+                this.currentCompareName = info.scoreType;
+                this.currentCompareFlag = true;
+                this.comparisonList.push(info);
+                setTimeout('Vue.set(vApp,"currentCompareFlag",false)', 1500);
+            }
+        },
+        deleteCompare: function (index) {
+            this.comparisonList.splice(index, 1);
+        },
+        /* 计算方法 */
+        percentAsForHeart: function (input) {
+            let base = str2BigNumber("70");
+            let passive = str2BigNumber(input.passive1).plus(str2BigNumber(input.passive2)).plus(str2BigNumber(input.passive3));
+            let critical = str2BigNumber(input.bigCriticalTimes).times("6.25").plus(str2BigNumber(input.smallCriticalTimes).times("3.25"));
+            let image = str2BigNumber(input.imageHeart).times("0.01").plus(1);
+            return (base.plus(passive).plus(critical)).times(image).times(3);
+        },
+        percentAsForShadow: function (input) {
+            let base = str2BigNumber(input.shadow);
+            let proactive = str2BigNumber(input.twentyHeart).times("0.51").plus(str2BigNumber(input.tenHeart).times("0.38"));
+            let image = str2BigNumber(input.imageShadow).times("0.01").plus(1);
+            return (base.plus(proactive)).times(image).times(3);
+        },
+        allPercent: function (input) {
+            return this.percentAsForHeart(input).plus(this.percentAsForShadow(input)).plus(300);
+        },
+        allPoint: function (input) {
+            return str2BigNumber(input.base).times(this.allPercent(input)).dividedBy(100);
         }
     }
 
