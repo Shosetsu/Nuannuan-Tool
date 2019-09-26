@@ -4,6 +4,8 @@ table.fight-simulator {
     margin: 10px;
     padding: 10px;
     display: inline-block;
+    
+    font-family: 'Noto Sans SC', sans-serif, '幼圆';
     background-color: rgba(215, 229, 250, 0.8);
 }
 
@@ -83,6 +85,28 @@ table.fight-simulator tr td.result2 {
     color: whitesmoke;
 }
 
-table.fight-simulator {
-    font-family: 'Noto Sans SC', sans-serif, '幼圆'!important;
+
+.compare-board {
+    position: absolute;
+    margin: auto 5%;
+    padding: 1% 5%;
+    width: 60%;
+    background: #FFFFCC;
+    text-align: center;
+    transition: all 1s;
+}
+
+.compare-board.hide {
+    opacity: 0;
+    transform: translateY(-500px);
+}
+
+.compare-board button {
+    float: right;
+    height: 30px;
+    padding: 5px;
+    margin: 0 2px;
+    border-radius: 10%;
+    background: snow;
+    font-size: 12px;
 }
