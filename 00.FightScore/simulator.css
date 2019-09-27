@@ -98,6 +98,7 @@ table.fight-simulator tr td.result2 {
 .compare-board.hide {
     opacity: 0;
     transform: translateY(-500px);
+    z-index: -1;
 }
 
 .compare-board ul button {
