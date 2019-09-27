@@ -5,7 +5,7 @@ var vApp = new Vue({
     components: {
         'simulator-table': {
             props: ['input'],
-            template: `		<table class="fight-simulator" :class="input.scoreType"><tbody>
+            template: `		<table class="fight-simulator" :class="scoreClass"><tbody>
             <tr class="title"><th colspan="2">搭配计算面板名：<input class="table-name" type="text" v-model="input.scoreType" list="scoreType" @blur="refresh()" /></th><td colspan="2">
             <button @click="deleteTable()">删除</button><button @click="compareThis()">添加到对比</button><button @click="newTable()">从此模板生成</button></td></tr>
 			<tr><th>基础搭配之力：</th><td><input type="number" v-model="input.base" @blur="refresh()" /></td><th>搭配之力基础倍率：</th><td>300.00%</td></tr>
@@ -20,6 +20,17 @@ var vApp = new Vue({
 			<tr><th>大件魅力爆发次数（期望）：</th><td><input type="number" v-model="input.bigCriticalTimes" @blur="refresh()" /></td><th>补给后总分：</th><td>{{input.allPoint.times("1.1").toFormat(0)}}</td></tr>
 			<tr><th>首饰魅力爆发次数（期望）：</th><td><input type="number" v-model="input.smallCriticalTimes" @blur="refresh()" /></td><th>补给后五次总分：</th><td class="result2">{{input.allPoint.times("5.5").toFormat(0)}}</td></tr>
             </tbody></table>`,
+            computed: {
+                scoreClass: function () {
+                    let scoreType = this.input.scoreType;
+                    if (scoreType.indexOf("典雅") != -1) return "dianya";
+                    if (scoreType.indexOf("清新") != -1) return "qingxin";
+                    if (scoreType.indexOf("甜美") != -1) return "tianmei";
+                    if (scoreType.indexOf("帅气") != -1) return "shuaiqi";
+                    if (scoreType.indexOf("性感") != -1) return "xinggan";
+                    return "";
+                }
+            },
             updated: function () {
                 //this.refresh();
             },
@@ -117,7 +128,7 @@ var vApp = new Vue({
             }
         },
         /* 计算方法 */
-        str2BigNumber:str2BigNumber,
+        str2BigNumber: str2BigNumber,
         calcPercentAsForHeart: function (input) {
             let base = str2BigNumber("70");
             let passive = str2BigNumber(input.passive1).plus(str2BigNumber(input.passive2)).plus(str2BigNumber(input.passive3));
