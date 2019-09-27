@@ -6,11 +6,12 @@
 	<title>搭配之战模拟器</title>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,400&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../lib/commonStyle.css?ver=0.1">
-	<link rel="stylesheet" type="text/css" href="./simulator.css?ver=0.1">
+	<link rel="stylesheet" type="text/css" href="./simulator.css?ver=0.11">
 	<script src="../lib/vue.js"></script>
-	<script src="../lib/tools.js?ver=0.1"></script>
+	<script src="../lib/tools.js?ver=0.11"></script>
 	<script src="../lib/layout.js?ver=0.1"></script>
 	<script src="../lib/bignumber.min.js"></script>
+	<script src="../lib/lz-string.min.js"></script>
 </head>
 
 <body class="plr10">
@@ -18,15 +19,28 @@
 		<div class="control-bar buttons">
 			<a @click="newTable()">添加新的搭配计算面板</a>
 			<a @click="comparisonVsible=!comparisonVsible">{{!comparisonVsible?"打开对比列表":"关闭对比列表"}}</a>
+			<hr />
+			<a @click="getSaveData">获取共享数据</a><a @click="loadSaveData">读取共享数据</a><input id="savedata"
+				v-model="saveData" />
 		</div>
-		<div :class="!currentCompareFlag?'hide':'show'" class="compare-board"><h4>已将{{currentCompareName}}追加到对比列表。</h4></div>
+		<div :class="!currentCompareFlag?'hide':'show'" class="compare-board">
+			<h4>已将{{currentCompareName}}追加到对比列表。</h4>
+		</div>
 		<div :class="!comparisonVsible?'hide':'show'" class="compare-board">
-			<h3>对比列表<button style="height: 30px; width: 30px; border-radius: 100%;" @click="comparisonVsible=!comparisonVsible">X</button></h3>
+			<h3>对比列表<button
+					style="height: 2.5em;width: 2.5em;border-radius: 100%;font-size: 0.5em;background: snow;float: right;"
+					@click="comparisonVsible=!comparisonVsible">X</button></h3>
 			<ul>
-				<li v-for="(item,index) in getComparisonList" style="text-align: left">{{item.scoreType}} -
-					基础搭配之力：{{item.base}} - 心之技能倍率：{{percentAsForHeart(item).toFormat(0)}}% -
-					影之召唤倍率：{{percentAsForShadow(item).toFormat(0)}}% - 总分：{{allPoint(item).toFormat(0)}}<button
-						@click="deleteCompare(index)">删除</button></li>
+				<li v-for="(item,index) in sortedComparisonList" style="text-align: left">
+					<div class="percent"  :class="index%2?'odd':'even'"
+						:style="{width: calcComparePercent(item).toFormat(2) +'%'}">
+						<div :style="{width: str2BigNumber(10000).dividedBy(calcComparePercent(item)).toFormat(2) +'%'}">
+							<button @click="deleteCompare(index)">删</button>{{item.scoreType}} -
+							基础搭配之力：{{item.base}} - 心之技能倍率：{{item.percentAsForHeart.toFormat(0)}}% -
+							影之召唤倍率：{{item.percentAsForShadow.toFormat(0)}}% - 总分：{{item.allPoint.toFormat(0)}}
+						</div>
+					</div>
+				</li>
 			</ul>
 		</div>
 		<span v-for="tableInfo in tableList">
@@ -42,7 +56,7 @@
 		<option>帅气</option>
 		<option>性感</option>
 	</datalist>
-	<script src="simulator.js?ver=0.1"></script>
+	<script src="simulator.js?ver=0.11"></script>
 </footer>
 
 </html>

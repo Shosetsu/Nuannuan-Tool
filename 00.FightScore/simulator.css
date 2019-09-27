@@ -1,12 +1,10 @@
 table.fight-simulator {
-    table-layout: fixed;
     border-radius: 5%;
-    margin: 10px;
-    padding: 10px;
-    display: inline-block;
-    
+    margin: 2% 0;
+    padding: 0.5%;
     font-family: 'Noto Sans SC', sans-serif, '幼圆';
     background-color: rgba(215, 229, 250, 0.8);
+    width: 99%;
 }
 
 table.fight-simulator.甜美 {
@@ -31,15 +29,16 @@ table.fight-simulator.性感 {
 
 table.fight-simulator tr.title th {
     text-align: center;
-    padding-bottom: 10px;
+    padding-bottom: 0.5em;
+    padding-left: 5em;
 }
 
 table.fight-simulator tr.title span {
-    line-height: 40px;
+    line-height: 2.92em;
 }
 
 table.fight-simulator tr.title input.table-name {
-    width: 100px;
+    width: 12em;
     height: 15px;
 }
 
@@ -54,16 +53,17 @@ table.fight-simulator tr.title button {
 }
 
 table.fight-simulator tr th {
+    width: 12em;
     text-align: right;
 }
 
 table.fight-simulator tr td {
-    width: 100px;
+    width: 8em;
     margin-right: 5px;
 }
 
 table.fight-simulator tr input {
-    width: 75px;
+    width: 85px;
     height: 18px;
     padding: 3px;
     margin: 2px 0 2px 0;
@@ -72,7 +72,7 @@ table.fight-simulator tr input {
 
 table.fight-simulator tr input.percent {
     margin: 2px 5px 2px 0;
-    width: 55px;
+    width: 65px;
 }
 
 table.fight-simulator tr td.result {
@@ -84,7 +84,6 @@ table.fight-simulator tr td.result2 {
     -webkit-text-stroke: 1px rgb(79, 153, 238);
     color: whitesmoke;
 }
-
 
 .compare-board {
     position: absolute;
@@ -101,12 +100,22 @@ table.fight-simulator tr td.result2 {
     transform: translateY(-500px);
 }
 
-.compare-board button {
-    float: right;
-    height: 30px;
+.compare-board ul button {
     padding: 5px;
-    margin: 0 2px;
-    border-radius: 10%;
+    margin: 0.4em 1em 0 0.5em;
+    border-radius: 5em;
     background: snow;
-    font-size: 12px;
+    font-size: 0.8em;
+}
+
+.compare-board ul .percent.odd {
+    background-color: #6495ED;
+}
+.compare-board ul .percent.even {
+    background-color: #FA8072;
+}
+
+input#savedata {
+    margin: 0 1em;
+    width: 20em;
 }

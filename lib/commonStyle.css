@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font: 14px/22px Arial, 微软雅黑;
+    font: 15px/24px 'Noto Sans SC', sans-serif, '幼圆';
     color: #333;
     word-wrap: break-word;
     cursor: default;
@@ -132,10 +132,6 @@ a:hover {
 .buttons a.next {
     background-color: burlywood;
     color: snow;
-}
-
-.buttons a+a, .buttons button+button {
-    margin-right: 10px;
 }
 
 .buttons a:hover, .buttons button:hover {
