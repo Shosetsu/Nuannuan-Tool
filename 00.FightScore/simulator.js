@@ -12,7 +12,7 @@ const resizeWindow = () => {
 };
 window.onresize = resizeWindow;
 resizeWindow();
-
+/*Application*/
 var vApp = new Vue({
     el: '#main-box',
     components: {
@@ -30,8 +30,8 @@ var vApp = new Vue({
 			<tr><th>影之召唤倍率：</th><td><input type="number" v-model="input.shadow" step="1" class="percent" @blur="refresh()" />%</td><th>还原搭配之力：</th><td class="result3">{{input.allPoint.dividedBy("6").toFormat(0)}}</td></tr>
 			<tr><th>20s心之技能提升倍率：</th><td><input type="number" v-model="input.twentyHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th>还原三卡搭配之力：</th><td class="result3">{{input.allPoint.dividedBy("8").toFormat(0)}}</td></tr>
 			<tr><th>10s心之技能提升倍率：</th><td><input type="number" v-model="input.tenHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th></th><td></td></tr>
-			<tr><th>大件魅力爆发次数（期望）：</th><td><input type="number" v-model="input.bigCriticalTimes" @blur="refresh()" /></td><th>补给后总分：</th><td>{{input.allPoint.times("1.1").toFormat(0)}}</td></tr>
-			<tr><th>首饰魅力爆发次数（期望）：</th><td><input type="number" v-model="input.smallCriticalTimes" @blur="refresh()" /></td><th>补给后五次总分：</th><td class="result2">{{input.allPoint.times("5.5").toFormat(0)}}</td></tr>
+			<tr><th>大件魅力爆发期望：</th><td><input type="number" v-model="input.bigCriticalTimes" @blur="refresh()" /></td><th>补给后总分：</th><td>{{input.allPoint.times("1.1").toFormat(0)}}</td></tr>
+			<tr><th>首饰魅力爆发期望：</th><td><input type="number" v-model="input.smallCriticalTimes" @blur="refresh()" /></td><th>补给后五次总分：</th><td class="result2">{{input.allPoint.times("5.5").toFormat(0)}}</td></tr>
             </tbody></table>`,
             computed: {
                 scoreClass: function () {
@@ -45,8 +45,8 @@ var vApp = new Vue({
                     return "";
                 }
             },
-            updated: function () {
-                //this.refresh();
+            mounted: function () {
+               //this.refresh();
             },
             methods: {
                 newTable: function () {
@@ -85,8 +85,7 @@ var vApp = new Vue({
             saveData: ""
         };
     },
-    mounted: function () {
-    },
+    mounted: function () { },
     computed: {
         sortedComparisonList: function () {
             return this.comparisonList.sort(function (a, b) {
@@ -123,19 +122,45 @@ var vApp = new Vue({
             this.comparisonList.splice(index, 1);
         },
         getSaveData: function () {
-            this.saveData = LZString.compressToEncodedURIComponent(JSON.stringify(this.tableList));
+            let saveData = "";
+            this.tableList.forEach((e, i) => {
+                saveData = saveData + e.id + "\;" + e.scoreType + "\;" + e.base + "\;" + e.passive1 + "\;" + e.passive2 + "\;" + e.passive3 + "\;"
+                    + e.imageHeart + "\;" + e.imageShadow + "\;" + e.shadow + "\;" + e.twentyHeart + "\;" + e.tenHeart + "\;"
+                    + e.bigCriticalTimes + "\;" + e.smallCriticalTimes;
+                if (i != this.tableList.length - 1) {
+                    saveData = saveData + "|";
+                }
+            });
+
+            this.saveData = LZString.compressToEncodedURIComponent(saveData);
             setTimeout("document.querySelector('#savedata').select()", 300);
         },
         loadSaveData: function () {
             try {
-                let tableData = JSON.parse(LZString.decompressFromEncodedURIComponent(this.saveData));
-                tableData.forEach((e) => {
+                let saveUnDataList = LZString.decompressFromEncodedURIComponent(this.saveData).split("|");
+                let tableDataList = [];
+
+                saveUnDataList.forEach((e) => {
+                    let oneData = e.split("\;");
+                    let tableData = {
+                        id: oneData[0], scoreType: oneData[1], base: oneData[2], passive1: oneData[3], passive2: oneData[4], passive3: oneData[5],
+                        imageHeart: oneData[6], imageShadow: oneData[7], shadow: oneData[8], twentyHeart: oneData[9], tenHeart: oneData[10],
+                        bigCriticalTimes: oneData[11], smallCriticalTimes: oneData[12],
+                        percentAsForHeart:str2BigNumber(0),
+                        percentAsForShadow:str2BigNumber(0),
+                        allPercent:str2BigNumber(0),
+                        allPoint:str2BigNumber(0)
+                    };
+                    tableDataList.push(tableData);
+                });
+
+                tableDataList.forEach((e) => {
                     e.percentAsForHeart = this.calcPercentAsForHeart(e);
                     e.percentAsForShadow = this.calcPercentAsForShadow(e);
                     e.allPercent = this.calcAllPercent(e);
                     e.allPoint = this.calcAllPoint(e);
                 });
-                this.tableList = tableData;
+                this.tableList = tableDataList;
                 this.saveData = "";
                 this.saveAllData();
             } catch (error) {
