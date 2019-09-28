@@ -1,10 +1,20 @@
 table.fight-simulator {
     border-radius: 5%;
-    padding: 0.5%;
-    margin-bottom: 1em;
+    padding: 0.2%;
+    margin: 0.3%;
     font-family: 'Noto Sans SC', sans-serif, '幼圆';
     background-color: rgba(215, 229, 250, 0.8);
     width: 99%;
+}
+
+.wide table.fight-simulator {
+    width: 49%;
+    display: inline-block;
+}
+
+.big-wide table.fight-simulator {
+    width: 32.33%;
+    display: inline-block;
 }
 
 table.fight-simulator.tianmei {

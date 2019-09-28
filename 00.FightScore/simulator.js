@@ -1,4 +1,17 @@
 const str2BigNumber = (str) => str ? BigNumber(str) : BigNumber(0);
+const resizeWindow = () => {
+    if (window.innerWidth >= window.innerHeight && window.innerWidth >= 1200) {
+        if (window.innerWidth >= 1900) {
+            window.document.body.classList = "big-wide";
+        } else {
+            window.document.body.classList = "wide";
+        }
+    } else {
+        window.document.body.classList = "";
+    }
+};
+window.onresize = resizeWindow;
+resizeWindow();
 
 var vApp = new Vue({
     el: '#main-box',
@@ -23,7 +36,7 @@ var vApp = new Vue({
             computed: {
                 scoreClass: function () {
                     let scoreType = this.input.scoreType;
-			if(!scoreType) return "";
+                    if (!scoreType) return "";
                     if (scoreType.indexOf("典雅") != -1) return "dianya";
                     if (scoreType.indexOf("清新") != -1) return "qingxin";
                     if (scoreType.indexOf("甜美") != -1) return "tianmei";
