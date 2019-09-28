@@ -5,16 +5,15 @@
 	<meta charset="utf-8">
 	<title>搭配之战模拟器</title>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,400&display=swap" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../lib/commonStyle.css?ver=0.1">
-	<link rel="stylesheet" type="text/css" href="./simulator.css?ver=0.13">
+	<link rel="stylesheet" type="text/css" href="../lib/commonStyle.css?ver=0.11">
+	<link rel="stylesheet" type="text/css" href="./simulator.css?ver=0.14">
 	<script src="../lib/vue.js"></script>
 	<script src="../lib/tools.js?ver=0.11"></script>
-	<script src="../lib/layout.js?ver=0.1"></script>
 	<script src="../lib/bignumber.min.js"></script>
 	<script src="../lib/lz-string.min.js"></script>
 </head>
 
-<body class="plr10">
+<body style="padding: 1%;">
 	<div id="main-box">
 		<div class="control-bar buttons">
 			<a @click="newTable()">添加新的搭配计算面板</a>
@@ -32,9 +31,10 @@
 					@click="comparisonVsible=!comparisonVsible">X</button></h3>
 			<ul>
 				<li v-for="(item,index) in sortedComparisonList" style="text-align: left">
-					<div class="percent"  :class="index%2?'odd':'even'"
+					<div class="percent" :class="index%2?'odd':'even'"
 						:style="{width: calcComparePercent(item).toFormat(2) +'%'}">
-						<div :style="{width: str2BigNumber(10000).dividedBy(calcComparePercent(item)).toFormat(2) +'%'}">
+						<div
+							:style="{width: str2BigNumber(10000).dividedBy(calcComparePercent(item)).toFormat(2) +'%'}">
 							<button @click="deleteCompare(index)">删</button>{{item.scoreType}} -
 							基础搭配之力：{{item.base}} - 心之技能倍率：{{item.percentAsForHeart.toFormat(0)}}% -
 							影之召唤倍率：{{item.percentAsForShadow.toFormat(0)}}% - 总分：{{item.allPoint.toFormat(0)}}
@@ -43,9 +43,11 @@
 				</li>
 			</ul>
 		</div>
-		<span v-for="tableInfo in tableList">
-			<simulator-table v-bind:input="tableInfo"></simulator-table>
-		</span>
+		<div class="contents">
+			<span v-for="tableInfo in tableList">
+				<simulator-table v-bind:input="tableInfo"></simulator-table>
+			</span>
+		</div>
 	</div>
 </body>
 <footer>
@@ -56,7 +58,7 @@
 		<option>帅气</option>
 		<option>性感</option>
 	</datalist>
-	<script src="simulator.js?ver=0.12"></script>
+	<script src="simulator.js?ver=0.13"></script>
 </footer>
 
 </html>
