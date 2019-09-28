@@ -23,6 +23,7 @@ var vApp = new Vue({
             computed: {
                 scoreClass: function () {
                     let scoreType = this.input.scoreType;
+			if(!scoreType) return "";
                     if (scoreType.indexOf("典雅") != -1) return "dianya";
                     if (scoreType.indexOf("清新") != -1) return "qingxin";
                     if (scoreType.indexOf("甜美") != -1) return "tianmei";
