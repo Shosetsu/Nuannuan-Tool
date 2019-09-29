@@ -126,12 +126,12 @@ var vApp = new Vue({
                 }
             });
 
-            this.saveData = LZString.compressToEncodedURIComponent(saveData);
+            this.saveData = LZString.compressToEncodedURIComponent(saveData.replace(/(undefined)/g,""));
             setTimeout("document.querySelector('#savedata').select()", 300);
         },
         loadSaveData: function () {
             try {
-                let saveUnDataList = LZString.decompressFromEncodedURIComponent(this.saveData).split("|");
+                let saveUnDataList = LZString.decompressFromEncodedURIComponent(this.saveData).replace(/(undefined)/g,"").split("|");
                 let tableDataList = [];
 
                 saveUnDataList.forEach((e) => {
