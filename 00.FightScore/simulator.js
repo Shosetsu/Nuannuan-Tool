@@ -30,8 +30,8 @@ var vApp = new Vue({
 			<tr><th>影之召唤倍率：</th><td><input type="number" v-model="input.shadow" step="1" class="percent" @blur="refresh()" />%</td><th>还原搭配之力：</th><td class="result3">{{allPoint.dividedBy("6").toFormat(0)}}</td></tr>
 			<tr><th>20s心之技能提升倍率：</th><td><input type="number" v-model="input.twentyHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th>还原三卡搭配之力：</th><td class="result3">{{allPoint.dividedBy("8").toFormat(0)}}</td></tr>
 			<tr><th>10s心之技能提升倍率：</th><td><input type="number" v-model="input.tenHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th></th><td></td></tr>
-			<tr><th>大件魅力爆发期望：</th><td><input type="number" v-model="input.bigCriticalTimes" @blur="refresh()" /></td><th>补给后总分：</th><td>{{allPoint.times("1.1").toFormat(0)}}</td></tr>
-			<tr><th>首饰魅力爆发期望：</th><td><input type="number" v-model="input.smallCriticalTimes" @blur="refresh()" /></td><th>补给后五次总分：</th><td class="result2">{{allPoint.times("5.5").toFormat(0)}}</td></tr>
+			<tr><th>大件魅力爆发期望：</th><td><input type="text" v-model="input.bigCriticalTimes" list="bigCirt" @blur="refresh()" /></td><th>补给后总分：</th><td>{{allPoint.times("1.1").toFormat(0)}}</td></tr>
+			<tr><th>首饰魅力爆发期望：</th><td><input type="text" v-model="input.smallCriticalTimes" list="smallCirt" @blur="refresh()" /></td><th>补给后五次总分：</th><td class="result2">{{allPoint.times("5.5").toFormat(0)}}</td></tr>
             </tbody></table>`,
             computed: {
                 scoreClass: function () {
