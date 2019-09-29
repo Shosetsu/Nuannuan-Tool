@@ -22,16 +22,16 @@ var vApp = new Vue({
             <tr class="title"><th colspan="2">搭配计算面板名<input class="table-name" type="text" v-model="input.scoreType" list="scoreType" @blur="refresh()" /></th><td colspan="2">
             <button @click="deleteTable()">删除</button><button @click="compareThis()">添加到对比</button><button @click="newTable()">从此模板生成</button></td></tr>
 			<tr><th>基础搭配之力：</th><td><input type="number" v-model="input.base" @blur="refresh()" /></td><th>搭配之力基础倍率：</th><td>300.00 %</td></tr>
-			<tr><th>被动1加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{input.percentAsForHeart.toFormat(2)}} %</td></tr>
-			<tr><th>被动2加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="refresh()" />%</td><th>影之召唤最终倍率：</th><td>{{input.percentAsForShadow.toFormat(2)}} %</td></tr>
+			<tr><th>被动1加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}} %</td></tr>
+			<tr><th>被动2加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="refresh()" />%</td><th>影之召唤最终倍率：</th><td>{{percentAsForShadow.toFormat(2)}} %</td></tr>
 			<tr><th>被动3加成倍率：</th><td colspan="3"><input type="number" v-model="input.passive3" step="0.1" class="percent" @blur="refresh()" />%</td></tr>
-			<tr><th>印象-心之技能倍率：</th><td><input type="number" v-model="input.imageHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th>预测总倍率：</th><td class="result">{{input.allPercent.toFormat(2)}} %</td></tr>
-			<tr><th>印象-影之召喚倍率：</th><td><input type="number" v-model="input.imageShadow" step="0.1" class="percent" @blur="refresh()" />%</td><th>预测总分：</th><td class="result">{{input.allPoint.toFormat(0)}}</td></tr>
-			<tr><th>影之召唤倍率：</th><td><input type="number" v-model="input.shadow" step="1" class="percent" @blur="refresh()" />%</td><th>还原搭配之力：</th><td class="result3">{{input.allPoint.dividedBy("6").toFormat(0)}}</td></tr>
-			<tr><th>20s心之技能提升倍率：</th><td><input type="number" v-model="input.twentyHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th>还原三卡搭配之力：</th><td class="result3">{{input.allPoint.dividedBy("8").toFormat(0)}}</td></tr>
+			<tr><th>印象-心之技能倍率：</th><td><input type="number" v-model="input.imageHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th>预测总倍率：</th><td class="result">{{allPercent.toFormat(2)}} %</td></tr>
+			<tr><th>印象-影之召喚倍率：</th><td><input type="number" v-model="input.imageShadow" step="0.1" class="percent" @blur="refresh()" />%</td><th>预测总分：</th><td class="result">{{allPoint.toFormat(0)}}</td></tr>
+			<tr><th>影之召唤倍率：</th><td><input type="number" v-model="input.shadow" step="1" class="percent" @blur="refresh()" />%</td><th>还原搭配之力：</th><td class="result3">{{allPoint.dividedBy("6").toFormat(0)}}</td></tr>
+			<tr><th>20s心之技能提升倍率：</th><td><input type="number" v-model="input.twentyHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th>还原三卡搭配之力：</th><td class="result3">{{allPoint.dividedBy("8").toFormat(0)}}</td></tr>
 			<tr><th>10s心之技能提升倍率：</th><td><input type="number" v-model="input.tenHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th></th><td></td></tr>
-			<tr><th>大件魅力爆发期望：</th><td><input type="number" v-model="input.bigCriticalTimes" @blur="refresh()" /></td><th>补给后总分：</th><td>{{input.allPoint.times("1.1").toFormat(0)}}</td></tr>
-			<tr><th>首饰魅力爆发期望：</th><td><input type="number" v-model="input.smallCriticalTimes" @blur="refresh()" /></td><th>补给后五次总分：</th><td class="result2">{{input.allPoint.times("5.5").toFormat(0)}}</td></tr>
+			<tr><th>大件魅力爆发期望：</th><td><input type="number" v-model="input.bigCriticalTimes" @blur="refresh()" /></td><th>补给后总分：</th><td>{{allPoint.times("1.1").toFormat(0)}}</td></tr>
+			<tr><th>首饰魅力爆发期望：</th><td><input type="number" v-model="input.smallCriticalTimes" @blur="refresh()" /></td><th>补给后五次总分：</th><td class="result2">{{allPoint.times("5.5").toFormat(0)}}</td></tr>
             </tbody></table>`,
             computed: {
                 scoreClass: function () {
@@ -43,10 +43,14 @@ var vApp = new Vue({
                     if (scoreType.indexOf("帅气") != -1) return "shuaiqi";
                     if (scoreType.indexOf("性感") != -1) return "xinggan";
                     return "";
-                }
+                },
+                percentAsForHeart: function () { return this.$parent.calcPercentAsForHeart(this.input) },
+                percentAsForShadow: function () { return this.$parent.calcPercentAsForShadow(this.input) },
+                allPercent: function () { return this.$parent.calcAllPercent(this.input) },
+                allPoint: function () { return this.$parent.calcAllPoint(this.input) }
             },
             mounted: function () {
-               //this.refresh();
+                //this.refresh();
             },
             methods: {
                 newTable: function () {
@@ -56,10 +60,6 @@ var vApp = new Vue({
                     this.$parent.deleteTable(this.input);
                 },
                 refresh: function () {
-                    this.input.percentAsForHeart = this.$parent.calcPercentAsForHeart(this.input);
-                    this.input.percentAsForShadow = this.$parent.calcPercentAsForShadow(this.input);
-                    this.input.allPercent = this.$parent.calcAllPercent(this.input);
-                    this.input.allPoint = this.$parent.calcAllPoint(this.input);
                     this.$parent.saveAllData();
                 },
                 compareThis: function () {
@@ -70,12 +70,6 @@ var vApp = new Vue({
     },
     data: function () {
         let tableData = getLocalSession("FightScoreTableSaveData", []);
-        tableData.forEach((e) => {
-            e.percentAsForHeart = this.calcPercentAsForHeart(e);
-            e.percentAsForShadow = this.calcPercentAsForShadow(e);
-            e.allPercent = this.calcAllPercent(e);
-            e.allPoint = this.calcAllPoint(e);
-        });
         return {
             comparisonVsible: false,
             currentCompareFlag: false,
@@ -145,21 +139,11 @@ var vApp = new Vue({
                     let tableData = {
                         id: oneData[0], scoreType: oneData[1], base: oneData[2], passive1: oneData[3], passive2: oneData[4], passive3: oneData[5],
                         imageHeart: oneData[6], imageShadow: oneData[7], shadow: oneData[8], twentyHeart: oneData[9], tenHeart: oneData[10],
-                        bigCriticalTimes: oneData[11], smallCriticalTimes: oneData[12],
-                        percentAsForHeart:str2BigNumber(0),
-                        percentAsForShadow:str2BigNumber(0),
-                        allPercent:str2BigNumber(0),
-                        allPoint:str2BigNumber(0)
+                        bigCriticalTimes: oneData[11], smallCriticalTimes: oneData[12]
                     };
                     tableDataList.push(tableData);
                 });
 
-                tableDataList.forEach((e) => {
-                    e.percentAsForHeart = this.calcPercentAsForHeart(e);
-                    e.percentAsForShadow = this.calcPercentAsForShadow(e);
-                    e.allPercent = this.calcAllPercent(e);
-                    e.allPoint = this.calcAllPoint(e);
-                });
                 this.tableList = tableDataList;
                 this.saveData = "";
                 this.saveAllData();
@@ -183,13 +167,13 @@ var vApp = new Vue({
             return (base.plus(proactive)).times(image).times(3);
         },
         calcAllPercent: function (input) {
-            return input.percentAsForHeart.plus(input.percentAsForShadow).plus(300);
+            return this.calcPercentAsForHeart(input).plus(this.calcPercentAsForShadow(input)).plus(300);
         },
         calcAllPoint: function (input) {
-            return str2BigNumber(input.base).times(input.allPercent).dividedBy(100);
+            return str2BigNumber(input.base).times(this.calcAllPercent(input)).dividedBy(100);
         },
         calcComparePercent: function (input) {
-            return input.allPoint.dividedBy(this.comparisonList[0].allPoint).times(100);
+            return this.calcAllPoint(input).dividedBy(this.calcAllPoint(this.comparisonList[0])).times(100);
         }
     }
 

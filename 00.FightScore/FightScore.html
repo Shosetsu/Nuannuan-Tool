@@ -6,7 +6,7 @@
     <title>搭配之战模拟器</title>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../lib/commonStyle.css?ver=0.11">
-    <link rel="stylesheet" type="text/css" href="./simulator.css?ver=0.16">
+    <link rel="stylesheet" type="text/css" href="./simulator.css?ver=0.17">
     <script src="../lib/vue.js"></script>
     <script src="../lib/tools.js?ver=0.11"></script>
     <script src="../lib/bignumber.min.js"></script>
@@ -36,8 +36,8 @@
                         <div
                             :style="{width: str2BigNumber(10000).dividedBy(calcComparePercent(item)).toFormat(2) +'%'}">
                             <button @click="deleteCompare(index)">删</button>{{item.scoreType}} - 基础搭配之力：{{item.base}} -
-                            心之技能倍率：{{item.percentAsForHeart.toFormat(0)}}% -
-                            影之召唤倍率：{{item.percentAsForShadow.toFormat(0)}}% - 总分：{{item.allPoint.toFormat(0)}}
+                            心之技能倍率：{{this.calcPercentAsForHeart(item).toFormat(0)}}% -
+                            影之召唤倍率：{{this.calcPercentAsForShadow(item).toFormat(0)}}% - 总分：{{this.calcAllPoint(item).toFormat(0)}}
                         </div>
                     </div>
                 </li>
@@ -58,7 +58,7 @@
         <option>帅气</option>
         <option>性感</option>
     </datalist>
-    <script src="simulator.js?ver=0.16"></script>
+    <script src="simulator.js?ver=0.17"></script>
 </footer>
 
 </html>
