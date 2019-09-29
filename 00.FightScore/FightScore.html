@@ -37,9 +37,9 @@
                         <div
                             :style="{width: str2BigNumber(10000).dividedBy(calcComparePercent(item)).toFormat(2) +'%'}">
                             <button @click="deleteCompare(index)">删</button>{{item.scoreType}} - 基础搭配之力：{{item.base}} -
-                            心之技能倍率：{{this.calcPercentAsForHeart(item).toFormat(0)}}% -
-                            影之召唤倍率：{{this.calcPercentAsForShadow(item).toFormat(0)}}% -
-                            总分：{{this.calcAllPoint(item).toFormat(0)}}
+                            心之技能倍率：{{calcPercentAsForHeart(item).toFormat(0)}}% -
+                            影之召唤倍率：{{calcPercentAsForShadow(item).toFormat(0)}}% -
+                            总分：{{calcAllPoint(item).toFormat(0)}}
                         </div>
                     </div>
                 </li>
@@ -68,7 +68,7 @@
         <option>帅气</option>
         <option>性感</option>
     </datalist>
-    <script src="simulator.js?ver=0.20"></script>
+    <script src="simulator.js?ver=0.21"></script>
 </footer>
 
 </html>

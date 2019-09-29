@@ -84,7 +84,7 @@ var vApp = new Vue({
     computed: {
         sortedComparisonList: function () {
             return this.comparisonList.sort(function (a, b) {
-                return b.allPoint - a.allPoint;
+                return vApp.calcAllPoint(b) - vApp.calcAllPoint(a);
             });
         }
     },
