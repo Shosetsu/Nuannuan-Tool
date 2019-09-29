@@ -22,9 +22,10 @@ var vApp = new Vue({
             <tr class="title"><th colspan="2">搭配计算面板名<input class="table-name" type="text" v-model="input.scoreType" list="scoreType" @blur="refresh()" /></th><td colspan="2">
             <button @click="deleteTable()">删除</button><button @click="compareThis()">添加到对比</button><button @click="newTable()">从此模板生成</button></td></tr>
 			<tr><th>基础搭配之力：</th><td><input type="number" v-model="input.base" @blur="refresh()" /></td><th>搭配之力基础倍率：</th><td>300.00 %</td></tr>
-			<tr><th>被动1加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}} %</td></tr>
-			<tr><th>被动2加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="refresh()" />%</td><th>影之召唤最终倍率：</th><td>{{percentAsForShadow.toFormat(2)}} %</td></tr>
-			<tr><th>被动3加成倍率：</th><td colspan="3"><input type="number" v-model="input.passive3" step="0.1" class="percent" @blur="refresh()" />%</td></tr>
+			<tr><th>衣服加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}} %</td></tr>
+			<tr><th>头发加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="refresh()" />%</td><th>影之召唤最终倍率：</th><td>{{percentAsForShadow.toFormat(2)}} %</td></tr>
+			<tr><th>鞋袜加成倍率：</th><td colspan="3"><input type="number" v-model="input.passive3" step="0.1" class="percent" @blur="refresh()" />%</td></tr>
+			<tr><th>首饰加成倍率：</th><td colspan="3"><input type="number" v-model="input.passive4" step="0.1" class="percent" @blur="refresh()" />%</td></tr>
 			<tr><th>印象-心之技能倍率：</th><td><input type="number" v-model="input.imageHeart" step="0.1" class="percent" @blur="refresh()" />%</td><th>预测总倍率：</th><td class="result">{{allPercent.toFormat(2)}} %</td></tr>
 			<tr><th>印象-影之召喚倍率：</th><td><input type="number" v-model="input.imageShadow" step="0.1" class="percent" @blur="refresh()" />%</td><th>预测总分：</th><td class="result">{{allPoint.toFormat(0)}}</td></tr>
 			<tr><th>影之召唤倍率：</th><td><input type="number" v-model="input.shadow" step="1" class="percent" @blur="refresh()" />%</td><th>还原搭配之力：</th><td class="result3">{{allPoint.dividedBy("6").toFormat(0)}}</td></tr>
@@ -118,7 +119,7 @@ var vApp = new Vue({
         getSaveData: function () {
             let saveData = "";
             this.tableList.forEach((e, i) => {
-                saveData = saveData + e.id + "\;" + e.scoreType + "\;" + e.base + "\;" + e.passive1 + "\;" + e.passive2 + "\;" + e.passive3 + "\;"
+                saveData = saveData + e.id + "\;" + e.scoreType + "\;" + e.base + "\;" + e.passive1 + "\;" + e.passive2 + "\;" + e.passive3 + "\;" + e.passive4 + "\;"
                     + e.imageHeart + "\;" + e.imageShadow + "\;" + e.shadow + "\;" + e.twentyHeart + "\;" + e.tenHeart + "\;"
                     + e.bigCriticalTimes + "\;" + e.smallCriticalTimes;
                 if (i != this.tableList.length - 1) {
@@ -126,20 +127,20 @@ var vApp = new Vue({
                 }
             });
 
-            this.saveData = LZString.compressToEncodedURIComponent(saveData.replace(/(undefined)/g,""));
+            this.saveData = LZString.compressToEncodedURIComponent(saveData.replace(/(undefined)/g, ""));
             setTimeout("document.querySelector('#savedata').select()", 300);
         },
         loadSaveData: function () {
             try {
-                let saveUnDataList = LZString.decompressFromEncodedURIComponent(this.saveData).replace(/(undefined)/g,"").split("|");
+                let saveUnDataList = LZString.decompressFromEncodedURIComponent(this.saveData).replace(/(undefined)/g, "").split("|");
                 let tableDataList = [];
 
                 saveUnDataList.forEach((e) => {
                     let oneData = e.split("\;");
                     let tableData = {
-                        id: oneData[0], scoreType: oneData[1], base: oneData[2], passive1: oneData[3], passive2: oneData[4], passive3: oneData[5],
-                        imageHeart: oneData[6], imageShadow: oneData[7], shadow: oneData[8], twentyHeart: oneData[9], tenHeart: oneData[10],
-                        bigCriticalTimes: oneData[11], smallCriticalTimes: oneData[12]
+                        id: oneData[0], scoreType: oneData[1], base: oneData[2], passive1: oneData[3], passive2: oneData[4], passive3: oneData[5], passive3: oneData[6],
+                        imageHeart: oneData[7], imageShadow: oneData[8], shadow: oneData[9], twentyHeart: oneData[10], tenHeart: oneData[11],
+                        bigCriticalTimes: oneData[12], smallCriticalTimes: oneData[13]
                     };
                     tableDataList.push(tableData);
                 });
@@ -154,17 +155,25 @@ var vApp = new Vue({
         /* 计算方法 */
         str2BigNumber: str2BigNumber,
         calcPercentAsForHeart: function (input) {
-            let base = str2BigNumber("70");
-            let passive = str2BigNumber(input.passive1).plus(str2BigNumber(input.passive2)).plus(str2BigNumber(input.passive3));
-            let critical = str2BigNumber(input.bigCriticalTimes).times("6.25").plus(str2BigNumber(input.smallCriticalTimes).times("3.25"));
             let image = str2BigNumber(input.imageHeart).times("0.01").plus(1);
-            return (base.plus(passive).plus(critical)).times(image).times(3);
+            let proactive20 = str2BigNumber(input.twentyHeart).times("0.01");
+            let proactive10 = str2BigNumber(input.tenHeart).times("0.01");
+
+            let skirt = (str2BigNumber("12.5").plus(str2BigNumber(input.passive1))).times(image.plus(proactive20).plus(proactive10));
+            let hair = (str2BigNumber("12.5").plus(str2BigNumber(input.passive2))).times(image.plus(proactive20).plus(proactive10));
+            let socks = (str2BigNumber("12.5").plus(str2BigNumber(input.passive3))).times(image);
+            let accessory = (str2BigNumber("6.5").plus(str2BigNumber(input.passive4))).times(image.plus(proactive20).plus(proactive10)).times(2)
+                .plus((str2BigNumber("6.5").plus(str2BigNumber(input.passive4))).times(image.plus(proactive20)).times(2))
+                .plus((str2BigNumber("6.5").plus(str2BigNumber(input.passive4))).times(image));
+
+            let critical = str2BigNumber(input.bigCriticalTimes).times(skirt.plus(hair).plus(socks).dividedBy(6))
+                .plus(str2BigNumber(input.smallCriticalTimes).times(accessory.dividedBy(10)));
+            return (skirt.plus(hair).plus(socks).plus(accessory).plus(critical)).times(3);
         },
         calcPercentAsForShadow: function (input) {
             let base = str2BigNumber(input.shadow);
-            let proactive = str2BigNumber(input.twentyHeart).times("0.51").plus(str2BigNumber(input.tenHeart).times("0.38"));
             let image = str2BigNumber(input.imageShadow).times("0.01").plus(1);
-            return (base.plus(proactive)).times(image).times(3);
+            return base.times(image).times(3);
         },
         calcAllPercent: function (input) {
             return this.calcPercentAsForHeart(input).plus(this.calcPercentAsForShadow(input)).plus(300);
