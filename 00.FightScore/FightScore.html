@@ -23,9 +23,6 @@
             <a @click="getSaveData">获取共享数据</a>&nbsp;<a @click="loadSaveData">读取共享数据</a>
             <input id="savedata" v-model="saveData" />
         </div>
-        <div :class="!currentCompareFlag?'hide':'show'" class="compare-board">
-            <h4>已将{{currentCompareName}}追加到对比列表。</h4>
-        </div>
         <div :class="!comparisonVsible?'hide':'show'" class="compare-board">
             <h3>对比列表<button
                     style="height: 2.5em;width: 2.5em;border-radius: 100%;font-size: 0.5em;background: snow;float: right;"
@@ -44,6 +41,9 @@
                     </div>
                 </li>
             </ul>
+        </div>
+        <div :class="!currentCompareFlag?'hide':'show'" class="compare-board">
+            <h4>已将{{currentCompareName}}追加到对比列表。</h4>
         </div>
         <div class="contents">
             <span v-for="tableInfo in tableList">
@@ -68,7 +68,7 @@
         <option>帅气</option>
         <option>性感</option>
     </datalist>
-    <script src="simulator.js?ver=0.21"></script>
+    <script src="simulator.js?ver=0.22"></script>
 </footer>
 
 </html>

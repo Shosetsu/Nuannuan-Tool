@@ -138,7 +138,7 @@ var vApp = new Vue({
                 saveUnDataList.forEach((e) => {
                     let oneData = e.split("\;");
                     let tableData = {
-                        id: oneData[0], scoreType: oneData[1], base: oneData[2], passive1: oneData[3], passive2: oneData[4], passive3: oneData[5], passive3: oneData[6],
+                        id: oneData[0], scoreType: oneData[1], base: oneData[2], passive1: oneData[3], passive2: oneData[4], passive3: oneData[5], passive4: oneData[6],
                         imageHeart: oneData[7], imageShadow: oneData[8], shadow: oneData[9], twentyHeart: oneData[10], tenHeart: oneData[11],
                         bigCriticalTimes: oneData[12], smallCriticalTimes: oneData[13]
                     };
