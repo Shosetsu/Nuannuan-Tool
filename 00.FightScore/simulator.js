@@ -1,3 +1,4 @@
+const dataVersion = "0.1";
 const str2BigNumber = (str) => str ? BigNumber(str) : BigNumber(0);
 const resizeWindow = () => {
     if (window.innerWidth >= window.innerHeight && window.innerWidth >= 1200) {
@@ -10,6 +11,18 @@ const resizeWindow = () => {
         window.document.body.classList = "";
     }
 };
+const doSaveDataFix = (saveData, saveVersion) => {
+    if (saveVersion == dataVersion) return;
+    switch (saveVersion) {
+        case 0:
+            saveData.forEach((e) => { e.autoFlag = e.autoFlag ? true : false; });
+
+        default:
+            break;
+    }
+    localStorage.setItem("FightScoreTableSaveVersion", dataVersion);
+    localStorage.setItem("FightScoreTableSaveData", JSON.stringify(saveData));
+};
 window.onresize = resizeWindow;
 resizeWindow();
 /*Application*/
@@ -21,7 +34,7 @@ var vApp = new Vue({
             template: `		<table class="fight-simulator" :class="scoreClass"><tbody>
             <tr class="title"><th colspan="2">搭配计算面板名<input class="table-name" type="text" v-model="input.scoreType" list="scoreType" @blur="refresh()" /></th><td colspan="2">
             <button @click="deleteTable()">删除</button><button @click="compareThis()">添加到对比</button><button @click="newTable()">从此模板生成</button>
-            <button @click="input.autoFlag=input.autoFlag?false:true">{{input.autoFlag?'自动':'手动'}}</button></td></tr>
+            <button @click="input.autoFlag=!input.autoFlag">{{!input.autoFlag?'自动':'手动'}}</button></td></tr>
 			<tr><th>基础搭配之力：</th><td><input type="number" v-model="input.base" @blur="refresh()" /></td><th>搭配之力基础倍率：</th><td>300.00 %</td></tr>
 			<tr><th>衣服加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}} %</td></tr>
 			<tr><th>头发加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="refresh()" />%</td><th>影之召唤最终倍率：</th><td>{{percentAsForShadow.toFormat(2)}} %</td></tr>
@@ -70,7 +83,9 @@ var vApp = new Vue({
         }
     },
     data: function () {
+        let tableDataVersion = getLocalSession("FightScoreTableSaveVersion", "0.0");
         let tableData = getLocalSession("FightScoreTableSaveData", []);
+        doSaveDataFix(tableData, tableDataVersion);
         return {
             comparisonVsible: false,
             currentCompareFlag: false,
@@ -103,6 +118,7 @@ var vApp = new Vue({
             this.deleteCompare(index);
         },
         saveAllData: function () {
+            localStorage.setItem("FightScoreTableSaveVersion", dataVersion);
             localStorage.setItem("FightScoreTableSaveData", JSON.stringify(this.tableList));
         },
         compareThis: function (info) {
@@ -121,7 +137,7 @@ var vApp = new Vue({
             this.tableList.forEach((e, i) => {
                 saveData = saveData + e.id + "\;" + e.scoreType + "\;" + e.base + "\;" + e.passive1 + "\;" + e.passive2 + "\;" + e.passive3 + "\;" + e.passive4 + "\;"
                     + e.imageHeart + "\;" + e.imageShadow + "\;" + e.shadow + "\;" + e.twentyHeart + "\;" + e.tenHeart + "\;"
-                    + e.bigCriticalTimes + "\;" + e.smallCriticalTimes;
+                    + e.bigCriticalTimes + "\;" + e.smallCriticalTimes + "\;" + e.autoFlag;
                 if (i != this.tableList.length - 1) {
                     saveData = saveData + "|";
                 }
@@ -140,7 +156,7 @@ var vApp = new Vue({
                     let tableData = {
                         id: oneData[0], scoreType: oneData[1], base: oneData[2], passive1: oneData[3], passive2: oneData[4], passive3: oneData[5], passive4: oneData[6],
                         imageHeart: oneData[7], imageShadow: oneData[8], shadow: oneData[9], twentyHeart: oneData[10], tenHeart: oneData[11],
-                        bigCriticalTimes: oneData[12], smallCriticalTimes: oneData[13]
+                        bigCriticalTimes: oneData[12], smallCriticalTimes: oneData[13], autoFlag: oneData[14]
                     };
                     tableDataList.push(tableData);
                 });
