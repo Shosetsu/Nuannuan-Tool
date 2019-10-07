@@ -34,8 +34,8 @@
                         <div
                             :style="{width: str2BigNumber(10000).dividedBy(calcComparePercent(item)).toFormat(2) +'%'}">
                             <button @click="deleteCompare(index)">删</button>{{item.scoreType}} - 基础搭配之力：{{item.base}} -
-                            {{item.autoFlag?"自动模式":"手动模式"}} - 
-                            倍率：{{calcAllPercent(item).toFormat(0)}}% - 
+                            {{item.autoFlag?"自动模式":"手动模式"}} -
+                            倍率：{{calcAllPercent(item).toFormat(0)}}% -
                             总分：{{calcAllPoint(item).toFormat(0)}} -
                             基准：{{calcComparePercent(item).toFormat(2)}}%
                         </div>
@@ -69,7 +69,7 @@
         <option>帅气</option>
         <option>性感</option>
     </datalist>
-    <script src="simulator.js?ver=0.24"></script>
+    <script src="simulator.js?ver=0.25"></script>
 </footer>
 
 </html>
