@@ -20,7 +20,8 @@ var vApp = new Vue({
             props: ['input'],
             template: `		<table class="fight-simulator" :class="scoreClass"><tbody>
             <tr class="title"><th colspan="2">搭配计算面板名<input class="table-name" type="text" v-model="input.scoreType" list="scoreType" @blur="refresh()" /></th><td colspan="2">
-            <button @click="deleteTable()">删除</button><button @click="compareThis()">添加到对比</button><button @click="newTable()">从此模板生成</button></td></tr>
+            <button @click="deleteTable()">删除</button><button @click="compareThis()">添加到对比</button><button @click="newTable()">从此模板生成</button>
+            <button @click="input.autoFlag=input.autoFlag?false:true">{{input.autoFlag?'自动':'手动'}}</button></td></tr>
 			<tr><th>基础搭配之力：</th><td><input type="number" v-model="input.base" @blur="refresh()" /></td><th>搭配之力基础倍率：</th><td>300.00 %</td></tr>
 			<tr><th>衣服加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}} %</td></tr>
 			<tr><th>头发加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="refresh()" />%</td><th>影之召唤最终倍率：</th><td>{{percentAsForShadow.toFormat(2)}} %</td></tr>
@@ -51,7 +52,6 @@ var vApp = new Vue({
                 allPoint: function () { return this.$parent.calcAllPoint(this.input) }
             },
             mounted: function () {
-                //this.refresh();
             },
             methods: {
                 newTable: function () {
@@ -159,12 +159,26 @@ var vApp = new Vue({
             let proactive20 = str2BigNumber(input.twentyHeart).times("0.01");
             let proactive10 = str2BigNumber(input.tenHeart).times("0.01");
 
-            let skirt = (str2BigNumber("12.5").plus(str2BigNumber(input.passive1))).times(image.plus(proactive20).plus(proactive10));
-            let hair = (str2BigNumber("12.5").plus(str2BigNumber(input.passive2))).times(image.plus(proactive20).plus(proactive10));
-            let socks = (str2BigNumber("12.5").plus(str2BigNumber(input.passive3))).times(image);
-            let accessory = (str2BigNumber("6.5").plus(str2BigNumber(input.passive4))).times(image.plus(proactive20).plus(proactive10)).times(2)
-                .plus((str2BigNumber("6.5").plus(str2BigNumber(input.passive4))).times(image.plus(proactive20)).times(2))
-                .plus((str2BigNumber("6.5").plus(str2BigNumber(input.passive4))).times(image));
+            let skirt = str2BigNumber("12.5");
+            let hair = str2BigNumber("12.5");
+            let socks = str2BigNumber("12.5");
+            let accessory = str2BigNumber("6.5");
+
+            if (input.autoFlag) {
+                skirt = (skirt.plus(str2BigNumber(input.passive1))).times(image);
+                hair = (hair.plus(str2BigNumber(input.passive2))).times(image.plus(proactive20).plus(proactive10));
+                socks = (socks.plus(str2BigNumber(input.passive3))).times(image);
+                accessory = (accessory.plus(str2BigNumber(input.passive4))).times(image.plus(proactive20).plus(proactive10))
+                    .plus((accessory.plus(str2BigNumber(input.passive4))).times(image.plus(proactive20)).times(3))
+                    .plus((accessory.plus(str2BigNumber(input.passive4))).times(image));
+            } else {
+                skirt = (skirt.plus(str2BigNumber(input.passive1))).times(image.plus(proactive20).plus(proactive10));
+                hair = (hair.plus(str2BigNumber(input.passive2))).times(image.plus(proactive20).plus(proactive10));
+                socks = (socks.plus(str2BigNumber(input.passive3))).times(image);
+                accessory = (accessory.plus(str2BigNumber(input.passive4))).times(image.plus(proactive20).plus(proactive10)).times(2)
+                    .plus((accessory.plus(str2BigNumber(input.passive4))).times(image.plus(proactive20)).times(2))
+                    .plus((accessory.plus(str2BigNumber(input.passive4))).times(image));
+            }
 
             let critical = str2BigNumber(input.bigCriticalTimes).times(skirt.plus(hair).plus(socks).dividedBy(6))
                 .plus(str2BigNumber(input.smallCriticalTimes).times(accessory.dividedBy(10)));
