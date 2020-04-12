@@ -34,9 +34,9 @@ var vApp = new Vue({
             template: `		<table class="fight-simulator" :class="scoreClass"><tbody>
             <tr class="title"><th colspan="2">搭配计算面板名<input class="table-name" type="text" v-model="input.scoreType" list="scoreType" @blur="refresh()" /></th><td colspan="2">
             <button @click="deleteTable()">删除</button><button @click="compareThis()">添加到对比</button><button @click="newTable()">从此模板生成</button>
-            <button @click="input.autoFlag=!input.autoFlag;refresh()">{{!input.autoFlag?'自动':'手动'}}</button></td></tr>
+            <button @click="input.autoFlag=!input.autoFlag;refresh()">{{input.autoFlag?'自动':'手动'}}</button></td></tr>
 			<tr><th>基础搭配之力：</th><td><input type="number" v-model="input.base" @blur="refresh()" /></td><th>搭配之力基础倍率：</th><td>300.00 %</td></tr>
-			<tr><th>衣服加成倍率：</th><td><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}} %</td></tr>
+			<tr><th colspan="0.5">衣服加成倍率：</th><td colspan="0.5"><input type="number" v-model="input.passive1" step="0.1" class="percent" @blur="refresh()" />%</td><th>心之技能最终倍率：</th><td>{{percentAsForHeart.toFormat(2)}} %</td></tr>
 			<tr><th>头发加成倍率：</th><td><input type="number" v-model="input.passive2" step="0.1" class="percent" @blur="refresh()" />%</td><th>影之召唤最终倍率：</th><td>{{percentAsForShadow.toFormat(2)}} %</td></tr>
 			<tr><th>鞋袜加成倍率：</th><td colspan="3"><input type="number" v-model="input.passive3" step="0.1" class="percent" @blur="refresh()" />%</td></tr>
 			<tr><th>首饰加成倍率：</th><td colspan="3"><input type="number" v-model="input.passive4" step="0.1" class="percent" @blur="refresh()" />%</td></tr>
